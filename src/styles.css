@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    color: white;
+    text-align: center;
+    background-color: grey;
+
+}
+
+/*content within the main frame of the app*/
+.dividedBody {
+    display: flex;
+    flex-grow: 1;
+}
+
+.navigationPane {
+    background-color: bisque;
+}
+
+
+
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer img {
+    height: 50px;
+    width: 50px;
+    transition: 0.4s;
+}
+
+.footer img:hover {
+    transform: scale(1.2) rotate(360deg);
+}
