@@ -2,13 +2,49 @@ import githubLogo from './images/GitHub-Mark.png';
 import './styles.css';
 
 //stores the list of projects (projects are objects containing tasks, tasks are objects containing info like title, description, deadline, priority etc)
-let projects = [];
+let projects = {
+};
+
+projects.noParentProject = {};
+
+//factory function for creating new projects which are 'parents' of the tasks
+function createProject(name){
+    let projectObj = {
+    };
+    projects[name] = projectObj;
+    return name;
+}
+
+let cs50 = createProject("CS50 Week 5");
+
+//factory function for creating a new task with a default parent project of none.
+function createTask(title, description, deadline, priority, parentProject = "noParentProject"){
+    let taskObj = {
+        title,
+        description,
+        deadline,
+        priority,
+    }
+    if (parentProject in projects){
+        projects[parentProject][title] = taskObj;
+    }
+    return taskObj;
+}
+
+//confirming createTask works as intended
+let cs50task = createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High", "Learning to code");
+
+let cs60task = createTask("Do CS60", "complete the next week of the CS60 Course", "11/03/2022", "High", "CS50 Week 5");
+
+console.log(projects);
+
 
 let content = document.querySelector("#content");
 
-function getTextElement(input){
-    let textElement = document.createElement('p');
+function getButton(input){
+    let textElement = document.createElement('button');
     textElement.textContent = input;
+    textElement.classList.add('navigationButton');
     return textElement;
 }
 
@@ -37,19 +73,15 @@ function createNavigationPane(){
     let navigationSubHeaderTime = document.createElement('h2')
     navigationSubHeaderTime.textContent = 'Timeframe';
 
-    let timeToday = getTextElement('Today');
-    let timeThisWeek = getTextElement('This Week');
-    let timeThisMonth = getTextElement('This Month');
-    let timeAll = getTextElement('All');
+    let timeToday = getButton('Today');
+    let timeThisWeek = getButton('This Week');
+    let timeThisMonth = getButton('This Month');
+    let timeAll = getButton('All');
 
     let navigationSubHeaderProjects = document.createElement('h2')
     navigationSubHeaderProjects.textContent = 'Projects';
 
-    projects.forEach(project => {
-        console.log('hehe');
-    })
-
-    navigationPane.append(navigationSubHeaderTime, timeToday, timeThisWeek, timeThisMonth, timeAll, navigationSubHeaderProjects);
+    navigationPane.append(navigationSubHeaderTime, timeAll, timeToday, timeThisWeek, timeThisMonth, navigationSubHeaderProjects);
 
     return navigationPane;
 }
