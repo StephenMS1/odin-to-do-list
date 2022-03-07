@@ -5,6 +5,7 @@ import './styles.css';
 let projects = {
 };
 
+//creates a "overall" project for tasks without a parent project
 projects.noParentProject = {};
 
 //factory function for creating new projects which are 'parents' of the tasks
@@ -15,7 +16,6 @@ function createProject(name){
     return name;
 }
 
-let cs50 = createProject("CS50 Week 5");
 
 //factory function for creating a new task with a default parent project of none.
 function createTask(title, description, deadline, priority, parentProject = "noParentProject"){
@@ -32,6 +32,8 @@ function createTask(title, description, deadline, priority, parentProject = "noP
 }
 
 //confirming createTask works as intended
+let cs50 = createProject("CS50 Week 5");
+
 let cs50task = createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High", "Learning to code");
 
 let cs60task = createTask("Do CS60", "complete the next week of the CS60 Course", "11/03/2022", "High", "CS50 Week 5");
@@ -39,8 +41,10 @@ let cs60task = createTask("Do CS60", "complete the next week of the CS60 Course"
 console.log(projects);
 
 
+//access the content via querySelector
 let content = document.querySelector("#content");
 
+//factory function for button so text only needs to be added
 function getButton(input){
     let textElement = document.createElement('button');
     textElement.textContent = input;
@@ -48,6 +52,8 @@ function getButton(input){
     return textElement;
 }
 
+
+//function to produce the header - static on page
 function createHeader(){
     let header = document.createElement('div');
     let title = document.createElement('h1');
@@ -57,6 +63,8 @@ function createHeader(){
     return header;
 }
 
+
+//function to produce the main display body - static on page
 function createDividedBody(){
     let dividedBody = document.createElement('div');
     dividedBody.classList.add('dividedBody');
@@ -66,6 +74,8 @@ function createDividedBody(){
     return dividedBody;
 }
 
+
+//function to produce the navigation pane - dynamic based on addition/removal of projects
 function createNavigationPane(){
     let navigationPane = document.createElement('div');
     navigationPane.classList.add('navigationPane');
@@ -86,6 +96,8 @@ function createNavigationPane(){
     return navigationPane;
 }
 
+
+//function for main interface where tasks are shown - dynamic based on current project
 function createListInterface(){
     let listInterface = document.createElement('div');
     listInterface.classList.add('listInterface');
@@ -99,6 +111,7 @@ function createListInterface(){
 }
 
 
+//function to create footer - static on page
 function createFooter() {
     let footer = document.createElement('div');
     footer.classList.add('footer');
@@ -120,4 +133,22 @@ function createFooter() {
 
 }
 
+//function for setting navigation button active
+function setNavigationListeners(){
+    let navigationButtons = Array.from(document.querySelectorAll('.navigationButton'));
+    navigationButtons.forEach(button => {
+        button.addEventListener('click', (e) =>{
+            navigationButtons.forEach(button => {
+                button.classList.remove('active');
+            })
+            e.target.classList.add('active');
+        })
+    })
+}
+
+
+
+//creation of page initially
 content.append(createHeader(), createDividedBody(), createFooter());
+
+setNavigationListeners();
