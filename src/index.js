@@ -1,40 +1,33 @@
 import githubLogo from './images/GitHub-Mark.png';
 import './styles.css';
 
+
 //stores the list of projects (projects are objects containing tasks, tasks are objects containing info like title, description, deadline, priority etc)
 let projects = {
 };
 
-//creates a "overall" project for tasks without a parent project
-projects.noParentProject = {};
-
-//factory function for creating new projects which are 'parents' of the tasks
-function createProject(name){
-    let projectObj = {
-    };
-    projects[name] = projectObj;
-    return name;
-}
-
+projects.noParentProject = {}
 
 //factory function for creating a new task with a default parent project of none.
-function createTask(title, description, deadline, priority, parentProject = "noParentProject"){
+function createTask(title, description, deadline, priority, parentProject = "noParentProject", completed = 'no'){
     let taskObj = {
         title,
         description,
         deadline,
         priority,
     }
-    if (parentProject in projects){
+    if (parentProject == 'noParentProject'){
+        projects['noParentProject'][title] = taskObj;
+    }
+    else if (parentProject in projects){
         projects[parentProject][title] = taskObj;
     }
     return taskObj;
 }
 
 //confirming createTask works as intended
-let cs50 = createProject("CS50 Week 5");
 
-let cs50task = createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High", "Learning to code");
+let cs50task = createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High");
 
 let cs60task = createTask("Do CS60", "complete the next week of the CS60 Course", "11/03/2022", "High", "CS50 Week 5");
 
@@ -49,6 +42,13 @@ function getButton(input){
     let textElement = document.createElement('button');
     textElement.textContent = input;
     textElement.classList.add('navigationButton');
+    return textElement;
+}
+
+//factory function text
+function getParagraph(input){
+    let textElement = document.createElement('p');
+    textElement.textContent = input;
     return textElement;
 }
 
@@ -91,6 +91,8 @@ function createNavigationPane(){
     let navigationSubHeaderProjects = document.createElement('h2')
     navigationSubHeaderProjects.textContent = 'Projects';
 
+    let projectNavigators = makeProjectNavigators();
+
     navigationPane.append(navigationSubHeaderTime, timeAll, timeToday, timeThisWeek, timeThisMonth, navigationSubHeaderProjects);
 
     return navigationPane;
@@ -102,10 +104,16 @@ function createListInterface(){
     let listInterface = document.createElement('div');
     listInterface.classList.add('listInterface');
 
+    let listInterfaceHeader = document.createElement('div');
+    listInterfaceHeader.classList.add('listInterfaceHeader');
+
     let currentProjectTitle = document.createElement('h2');
     currentProjectTitle.textContent = "I would show you which project or timeline you are looking at :)";
 
-    listInterface.append(currentProjectTitle);
+    listInterfaceHeader.append(currentProjectTitle);
+
+    //testing taskCard
+    listInterface.append(listInterfaceHeader, getTaskVisual(projects['noParentProject']['Do CS50']))
 
     return listInterface;
 }
@@ -130,7 +138,6 @@ function createFooter() {
     footer.append(footerText, githubLink);
 
     return footer;
-
 }
 
 //function for setting navigation button active
@@ -146,7 +153,30 @@ function setNavigationListeners(){
     })
 }
 
+//function for creating task visual
+function getTaskVisual(task){
+    let taskCard = document.createElement('div');
+    taskCard.classList.add('taskCard');
 
+    let taskCheckBox = document.createElement('button');
+    taskCheckBox.classList.add('taskCheckBox');
+
+    let taskTitle = getParagraph(task.title);
+    let taskPriority = getParagraph(task.priority);
+    let taskDate = getParagraph(task.deadline);
+    let taskDescription = getParagraph(task.description);
+
+    taskCard.append(taskCheckBox, taskTitle, taskPriority, taskDate, taskDescription);
+
+    return taskCard;
+}
+
+//function for making project navigators
+function makeProjectNavigators(){
+    for (let key in projects){
+        console.log(key);
+    }
+}
 
 //creation of page initially
 content.append(createHeader(), createDividedBody(), createFooter());
