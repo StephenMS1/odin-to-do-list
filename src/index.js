@@ -7,6 +7,7 @@ let projects = {
 };
 
 projects.noParentProject = {}
+projects['CS50 Week 5'] = {}
 
 //factory function for creating a new task with a default parent project of none.
 function createTask(title, description, deadline, priority, parentProject = "noParentProject", completed = 'no'){
@@ -27,9 +28,9 @@ function createTask(title, description, deadline, priority, parentProject = "noP
 
 //confirming createTask works as intended
 
-let cs50task = createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High");
+createTask("Wash Bedding", "wash and dry bedding", "14/03/2022", "High");
 
-let cs60task = createTask("Do CS60", "complete the next week of the CS60 Course", "11/03/2022", "High", "CS50 Week 5");
+createTask("Do CS50", "complete the next week of the CS50 Course", "11/03/2022", "High", "CS50 Week 5");
 
 console.log(projects);
 
@@ -91,9 +92,13 @@ function createNavigationPane(){
     let navigationSubHeaderProjects = document.createElement('h2')
     navigationSubHeaderProjects.textContent = 'Projects';
 
-    let projectNavigators = makeProjectNavigators();
+    let projectNavigators = makeProjectNavigators()
 
     navigationPane.append(navigationSubHeaderTime, timeAll, timeToday, timeThisWeek, timeThisMonth, navigationSubHeaderProjects);
+
+    projectNavigators.forEach(button => {
+        navigationPane.append(button);
+    })
 
     return navigationPane;
 }
@@ -113,7 +118,7 @@ function createListInterface(){
     listInterfaceHeader.append(currentProjectTitle);
 
     //testing taskCard
-    listInterface.append(listInterfaceHeader, getTaskVisual(projects['noParentProject']['Do CS50']))
+    listInterface.append(listInterfaceHeader, getTaskVisual(projects['noParentProject']['Wash Bedding']))
 
     return listInterface;
 }
@@ -161,6 +166,7 @@ function getTaskVisual(task){
     let taskCheckBox = document.createElement('button');
     taskCheckBox.classList.add('taskCheckBox');
 
+    //sample while working
     let taskTitle = getParagraph(task.title);
     let taskPriority = getParagraph(task.priority);
     let taskDate = getParagraph(task.deadline);
@@ -173,9 +179,12 @@ function getTaskVisual(task){
 
 //function for making project navigators
 function makeProjectNavigators(){
+    let projectNavigators = []
+    
     for (let key in projects){
-        console.log(key);
+        projectNavigators.push(getButton(key));
     }
+    return projectNavigators;
 }
 
 //creation of page initially
